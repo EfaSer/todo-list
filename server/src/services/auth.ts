@@ -7,5 +7,5 @@ export const generateToken = (userId: number) => {
 };
 
 export const verifyToken = (token: string) => {
-  return jwt.verify(token, JWT_SECRET) as { userID: number };
+  return jwt.verify(token, JWT_SECRET) as { userId: number };
 };

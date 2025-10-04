@@ -9,7 +9,6 @@ export const getTodos = async (req: AuthRequest, res: Response) => {
 
 export const createTodo = async (req: AuthRequest, res: Response) => {
   const { title, description } = req.body;
-  console.log("req.userId", req);
   const todo = await prisma.todo.create({
     data: {
       title,

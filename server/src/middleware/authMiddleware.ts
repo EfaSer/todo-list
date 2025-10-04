@@ -17,7 +17,6 @@ export const authMiddleware = (
   const token = AuthHeader.split(" ")[1];
   try {
     const payload = verifyToken(token);
-    console.log("payload", payload);
     req.userId = payload.userId;
     next();
   } catch {
