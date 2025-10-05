@@ -63,7 +63,7 @@ export const TodoPage = () => {
         className="flex gap-2 w-full max-w-md md-6 flex-col mb-10"
       >
         <h2 className="text-xl/7 font-bold text-white sm:truncate sm:text-3xl sm:tracking-tight">
-          Новая задача
+          Создать задачу
         </h2>
         <Input
           label="Введите название задачи..."
