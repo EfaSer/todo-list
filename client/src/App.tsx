@@ -1,12 +1,16 @@
+import { Navigate, Route, Routes } from "react-router-dom";
+import { LoginPage } from "./pages/LoginPage";
+import { RegisterPage } from "./pages/RegisterPage";
+import { TodoPage } from "./pages/TodoPage";
+
 function App() {
   return (
-    <>
-      <div className="h-screen w-screen flex items-center justify-center">
-        <h1 className="text-4xl font-bold text-blue-600">
-          ✅ Tailwind работает!
-        </h1>
-      </div>
-    </>
+    <Routes>
+      <Route path="/" element={<Navigate to="/todos" />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/todos" element={<TodoPage />} />
+    </Routes>
   );
 }
 

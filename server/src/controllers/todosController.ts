@@ -21,21 +21,21 @@ export const createTodo = async (req: AuthRequest, res: Response) => {
 
 export const updateTodo = async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
-  const { title, description, completed } = req.body;
 
-  const todo = await prisma.todo.updateMany({
-    where: { id: Number(id), ownerId: req.userId },
-    data: {
-      title,
-      description,
-      completed,
-    },
+  const existing = await prisma.todo.findUnique({
+    where: { id: Number(id) },
   });
 
-  if (todo.count === 0)
+  if (!existing || existing.ownerId !== req.userId) {
     return res.status(404).json({ error: "Todo not found" });
+  }
 
-  res.json({ message: "Updated" });
+  const updated = await prisma.todo.update({
+    where: { id: Number(id) },
+    data: { completed: !existing.completed },
+  });
+
+  res.json(updated);
 };
 
 export const deleteTodo = async (req: AuthRequest, res: Response) => {
