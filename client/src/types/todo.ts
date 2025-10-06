@@ -3,4 +3,5 @@ export interface ITodo {
   title: string;
   completed: boolean;
   description: string;
+  order: number;
 }

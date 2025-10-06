@@ -1,3 +1,15 @@
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { TodoFilterBar } from "@/components/TodoFilterBar";
 import { TodoItem } from "@/components/TodoItem";
 import { Button } from "@/components/ui/Button";
@@ -15,6 +27,7 @@ export const TodoPage = () => {
     addTodo,
     toggleTodo,
     removeTodo,
+    reorderTodos,
     search,
     filter,
     loading,
@@ -27,18 +40,40 @@ export const TodoPage = () => {
     fetchTodos();
   }, []);
 
-  const filterTodos = todos.filter((todo) => {
-    const matchesSearch = todo.title
-      .toLocaleLowerCase()
-      .includes(search.toLocaleLowerCase());
+  const sensors = useSensors(useSensor(PointerSensor));
 
-    const matchesFilter =
-      filter === "all" ||
-      (filter === "completed" && todo.completed) ||
-      (filter === "active" && !todo.completed);
+  const filterTodos = todos
+    .filter((todo) => {
+      const matchesSearch = todo.title
+        .toLocaleLowerCase()
+        .includes(search.toLocaleLowerCase());
 
-    return matchesSearch && matchesFilter;
-  });
+      const matchesFilter =
+        filter === "all" ||
+        (filter === "completed" && todo.completed) ||
+        (filter === "active" && !todo.completed);
+
+      return matchesSearch && matchesFilter;
+    })
+    .sort((a, b) => (a.order = b.order));
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const currentTodos = [...todos].sort((a, b) => a.order - b.order);
+    const oldIndex = currentTodos.findIndex((t) => t.id === active.id);
+    const newIndex = currentTodos.findIndex((t) => t.id === over.id);
+
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    const reordered = arrayMove(currentTodos, oldIndex, newIndex);
+
+    useTodosStore.setState({ todos: reordered });
+    const orderedIds = reordered.map((t, i) => t.id);
+
+    reorderTodos(orderedIds);
+  };
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,16 +123,28 @@ export const TodoPage = () => {
         <Button type="submit">Добавить</Button>
       </form>
       <TodoFilterBar />
-      <div className="space-y-3 w-full max-w-1/2">
-        {filterTodos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            onToggle={() => toggleTodo(todo.id)}
-            onDelete={() => removeTodo(todo.id)}
-          />
-        ))}
-      </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={filterTodos.map((t) => t.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="space-y-3 w-full max-w-1/2">
+            {filterTodos.map((todo) => (
+              <TodoItem
+                key={todo.id}
+                id={todo.id}
+                todo={todo}
+                onToggle={() => toggleTodo(todo.id)}
+                onDelete={() => removeTodo(todo.id)}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 };

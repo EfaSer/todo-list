@@ -20,4 +20,8 @@ export const todosApi = {
   async remove(id: number) {
     const res = await axiosInstance.delete(`/todos/${id}`);
   },
+
+  async reorder(orderedIds: number[]) {
+    await axiosInstance.post("/todos/reorder", { orderedIds });
+  },
 };

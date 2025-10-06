@@ -15,6 +15,7 @@ interface TodoState {
   removeTodo: (id: number) => Promise<void>;
   setSearch: (value: string) => void;
   setFilter: (value: FilterType) => void;
+  reorderTodos: (orderedIds: number[]) => Promise<void>;
 }
 
 export const useTodosStore = create<TodoState>((set, get) => ({
@@ -48,4 +49,12 @@ export const useTodosStore = create<TodoState>((set, get) => ({
   },
   setSearch: (value) => set({ search: value }),
   setFilter: (value) => set({ filter: value }),
+
+  reorderTodos: async (orderedIds: number[]) => {
+    try {
+      await todosApi.reorder(orderedIds);
+    } catch (error) {
+      console.error("Ошибка reorder:", error);
+    }
+  },
 }));
