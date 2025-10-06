@@ -1,3 +1,4 @@
+import { TodoFilterBar } from "@/components/TodoFilterBar";
 import { TodoItem } from "@/components/TodoItem";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -8,15 +9,36 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const TodoPage = () => {
-  const { fetchTodos, todos, addTodo, toggleTodo, removeTodo, loading } =
-    useTodosStore();
+  const {
+    fetchTodos,
+    todos,
+    addTodo,
+    toggleTodo,
+    removeTodo,
+    search,
+    filter,
+    loading,
+  } = useTodosStore();
   const { logout } = useAuthStore();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
 
   useEffect(() => {
     fetchTodos();
-  }, [fetchTodos]);
+  }, []);
+
+  const filterTodos = todos.filter((todo) => {
+    const matchesSearch = todo.title
+      .toLocaleLowerCase()
+      .includes(search.toLocaleLowerCase());
+
+    const matchesFilter =
+      filter === "all" ||
+      (filter === "completed" && todo.completed) ||
+      (filter === "active" && !todo.completed);
+
+    return matchesSearch && matchesFilter;
+  });
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,9 +87,9 @@ export const TodoPage = () => {
         />
         <Button type="submit">Добавить</Button>
       </form>
-
+      <TodoFilterBar />
       <div className="space-y-3 w-full max-w-1/2">
-        {todos.map((todo) => (
+        {filterTodos.map((todo) => (
           <TodoItem
             key={todo.id}
             todo={todo}
