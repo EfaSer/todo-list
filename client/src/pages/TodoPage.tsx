@@ -34,13 +34,6 @@ export const TodoPage = () => {
 
   return (
     <div className="p-8">
-      {/* <div className="flex w-full justify-between items-center">
-        <h1 className="text-3xl font-semibold">Мои задачи</h1>
-        <Button className="w-64" value="secondary" onClick={handleLogout}>
-          Выйти
-        </Button>
-      </div> */}
-
       <div className="lg:flex lg:items-center lg:justify-between mb-20">
         <h1 className="text-2xl/7 font-bold text-white sm:truncate sm:text-3xl sm:tracking-tight">
           Мои задачи
