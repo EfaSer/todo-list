@@ -10,6 +10,8 @@ interface AuthState {
   login: (data: IUser) => Promise<boolean>;
   register: (data: IUser) => Promise<boolean>;
   logout: () => void;
+  sessionExpired: boolean;
+  setSessionExpired: (value: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -17,6 +19,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   token: localStorage.getItem("token"),
   loading: false,
   error: null,
+  sessionExpired: false,
+
+  setSessionExpired: (value) => set({ sessionExpired: value }),
 
   login: async (data) => {
     set({ loading: true, error: null });

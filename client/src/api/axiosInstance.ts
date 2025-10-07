@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/store/authStore";
 import axios from "axios";
 
 export const axiosInstance = axios.create({
@@ -12,3 +13,15 @@ axiosInstance.interceptors.request.use((config) => {
   }
   return config;
 });
+
+axiosInstance.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    if (error.response?.status === 401) {
+      const authStore = useAuthStore.getState();
+      authStore.setSessionExpired(true);
+      authStore.logout();
+    }
+    return Promise.reject(error);
+  }
+);
