@@ -35,10 +35,14 @@ export const Modal = ({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/60 
-      ${isOpen ? "animate-fade-in" : "animate-fade-out"}`}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/60  
+      ${isOpen ? "animate-opacity-in" : "animate-opacity-out"}`}
     >
-      <div className="bg-gray-800 p-6 rounded-2xl shadow-xl w-80 text-center animate-fade-in">
+      <div
+        className={`bg-gray-800 p-6 rounded-2xl shadow-xl w-80 text-center animate-fade-in ${
+          isOpen ? "animate-fade-in" : "animate-fade-out"
+        }`}
+      >
         <h2 className="text-xl font-semibold text-white mb-2">{title}</h2>
         {message && <p className="text-white mb-5">{message}</p>}
 

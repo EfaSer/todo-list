@@ -53,7 +53,7 @@ h1 {
   }
 }
 
-@keyframes fadeOutScale {
+@keyframes fadeOutOpacity {
   0% {
     opacity: 1;
     transform: scale(1);
@@ -64,10 +64,35 @@ h1 {
   }
 }
 
+@keyframes fadeInScaleBG {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutOpacityBG {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .animate-fade-in {
   animation: fadeInScale 0.25s ease-out forwards;
 }
 
 .animate-fade-out {
   animation: fadeOutScale 0.2s ease-in forwards;
+}
+
+.animate-opacity-in {
+  animation: fadeInScaleBG 0.25s ease-out forwards;
+}
+.animate-opacity-out {
+  animation: fadeOutOpacityBG 0.2s ease-in forwards;
 }
