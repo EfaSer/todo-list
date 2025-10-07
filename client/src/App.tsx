@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Modal } from "./components/Modal";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
@@ -32,22 +33,12 @@ function App() {
       </Routes>
 
       {sessionExpired && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-          <div className="bg-gray-800 p-6 rounded-2xl shadow-xl w-80 text-center animate-fade-in">
-            <h2 className="text-xl font-semibold text-white mb-2">
-              Время сессии истекло
-            </h2>
-            <p className="text-white mb-5">
-              Пожалуйста, войдите снова, чтобы продолжить.
-            </p>
-            <button
-              onClick={handleSessionExpired}
-              className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors cursor-pointer"
-            >
-              ОК
-            </button>
-          </div>
-        </div>
+        <Modal
+          title={"Время сессии истекло"}
+          message={"Пожалуйста, войдите снова, чтобы продолжить."}
+          confirmText={"OK"}
+          onConfirm={handleSessionExpired}
+        />
       )}
     </>
   );
