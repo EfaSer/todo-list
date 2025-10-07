@@ -10,7 +10,7 @@ interface TodoState {
   search: string;
   filter: FilterType;
   fetchTodos: () => Promise<void>;
-  addTodo: (title: string) => Promise<void>;
+  addTodo: (title: string, description: string) => Promise<void>;
   toggleTodo: (id: number) => Promise<void>;
   removeTodo: (id: number) => Promise<void>;
   setSearch: (value: string) => void;
@@ -29,8 +29,8 @@ export const useTodosStore = create<TodoState>((set, get) => ({
     set({ todos: data, loading: false });
   },
 
-  addTodo: async (title) => {
-    const newTodo = await todosApi.create({ title });
+  addTodo: async (title, description) => {
+    const newTodo = await todosApi.create({ title, description });
     set({ todos: [...get().todos, newTodo] });
   },
 

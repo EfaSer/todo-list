@@ -2,6 +2,6 @@ export interface ITodo {
   id: number;
   title: string;
   completed: boolean;
-  description: string;
+  description?: string;
   order: number;
 }

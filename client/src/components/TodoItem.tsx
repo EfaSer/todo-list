@@ -42,14 +42,23 @@ export const TodoItem = ({
         >
           {todo.completed && "✓"}
         </div>
-        <div
-          {...attributes}
-          {...listeners}
-          className={`text-xm mr-9.5 font-bold text-white break-words min-w-0 flex-1 ${
-            todo.completed ? "line-through text-gray-400" : ""
-          }`}
-        >
-          {todo.title}
+        <div className="min-w-0 flex-1" {...attributes} {...listeners}>
+          <div
+            className={`text-xl mr-9.5 font-bold text-white break-words  ${
+              todo.completed ? "line-through text-gray-400" : ""
+            }`}
+          >
+            {todo.title}
+          </div>
+          {todo.description && (
+            <div
+              className={`text-xm mr-9.5 font-bold text-white break-words  ${
+                todo.completed ? "line-through text-gray-400" : ""
+              }`}
+            >
+              {todo.description}
+            </div>
+          )}
         </div>
         <button
           onClick={() => setIsOpen(true)}
