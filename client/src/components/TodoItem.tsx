@@ -4,20 +4,25 @@ import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
 import { Modal } from "./Modal";
 import DeleteIcon from "../assets/delete.svg?react";
+import EditIcon from "../assets/edit.svg?react";
+import { EditTodoModal } from "./EditTodoModal";
 
 interface TodoItemProps {
   todo: ITodo;
   onToggle: () => void;
   onDelete: () => void;
+  onSave: () => void;
 }
 
 export const TodoItem = ({
   todo,
   onToggle,
   onDelete,
+  onSave,
   id,
 }: TodoItemProps & { id: number }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
 
@@ -67,15 +72,25 @@ export const TodoItem = ({
             </div>
           )}
         </div>
-        <button
-          onClick={() => setIsOpen(true)}
-          className="absolute bottom-2 right-2 inline-flex items-center justify-center text-white/60 hover:text-white/90 transition-colors w-5 h-5 cursor-pointer"
-        >
-          {/* <span className="text-lg font-light">✕</span> */}
-          <span className="text-lg font-light">
-            <DeleteIcon className="w-5 h-5 text-white hover:text-gray-400 transition-colors" />
-          </span>
-        </button>
+        <div className="flex gap-4 absolute bottom-2 right-2">
+          <button
+            onClick={() => setIsOpenEdit(true)}
+            className="inline-flex items-center justify-center text-white/60 hover:text-white/90 transition-colors w-5 h-5 cursor-pointer"
+          >
+            <span className="text-lg font-light">
+              <EditIcon className="w-5 h-5 text-white hover:text-gray-400 transition-colors" />
+            </span>
+          </button>
+
+          <button
+            onClick={() => setIsOpen(true)}
+            className=" inline-flex items-center justify-center text-white/60 hover:text-white/90 transition-colors w-5 h-5 cursor-pointer"
+          >
+            <span className="text-lg font-light">
+              <DeleteIcon className="w-5 h-5 text-white hover:text-gray-400 transition-colors" />
+            </span>
+          </button>
+        </div>
       </div>
       {isOpen && (
         <Modal
@@ -90,6 +105,23 @@ export const TodoItem = ({
           cancelText="Отмена"
           onCancel={() => {
             setTimeout(() => setIsOpen(false), 200);
+          }}
+        />
+      )}
+      {isOpenEdit && (
+        <EditTodoModal
+          todo={todo}
+          isOpen={isOpenEdit}
+          // onConfirm={() => {
+          //   setIsOpenEdit(false);
+          //   setTimeout(() => onSave?.(), 200);
+          // }}
+          onSave={(updatedTodo) => {
+            onSave(updatedTodo); // передаем в родителя
+            setIsOpenEdit(false);
+          }}
+          onCancel={() => {
+            setTimeout(() => setIsOpenEdit(false), 200);
           }}
         />
       )}

@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 interface ModalProps {
-  title: string;
-  message: string;
+  title?: string;
+  message?: string;
   confirmText: string;
   cancelText?: string;
   onConfirm: () => void;
   onCancel?: () => void;
   isOpen?: boolean;
+  children?: ReactNode;
 }
 
 export const Modal = ({
@@ -18,6 +19,7 @@ export const Modal = ({
   onConfirm,
   onCancel,
   isOpen,
+  children,
 }: ModalProps) => {
   const [visible, setVisible] = useState(isOpen);
 
@@ -45,6 +47,8 @@ export const Modal = ({
       >
         <h2 className="text-xl font-semibold text-white mb-2">{title}</h2>
         {message && <p className="text-white mb-5">{message}</p>}
+
+        {children && <div className="w-full">{children}</div>}
 
         <div className="flex justify-center gap-5 mt-4">
           <button

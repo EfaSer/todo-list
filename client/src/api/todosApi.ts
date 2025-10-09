@@ -12,6 +12,11 @@ export const todosApi = {
     return res.data;
   },
 
+  async update(id: number, data: { title?: string; description?: string }) {
+    const res = await axiosInstance.put<ITodo>(`/todos/${id}`, data);
+    return res.data;
+  },
+
   async toggle(id: number) {
     const res = await axiosInstance.patch<ITodo>(`/todos/${id}`);
     return res.data;

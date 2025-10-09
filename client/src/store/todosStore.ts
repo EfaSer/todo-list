@@ -13,6 +13,10 @@ interface TodoState {
   addTodo: (title: string, description: string) => Promise<void>;
   toggleTodo: (id: number) => Promise<void>;
   removeTodo: (id: number) => Promise<void>;
+  updateTodo: (
+    id: number,
+    data: { title: string; description: string }
+  ) => Promise<void>;
   setSearch: (value: string) => void;
   setFilter: (value: FilterType) => void;
   reorderTodos: (orderedIds: number[]) => Promise<void>;
@@ -33,7 +37,12 @@ export const useTodosStore = create<TodoState>((set, get) => ({
     const newTodo = await todosApi.create({ title, description });
     set({ todos: [...get().todos, newTodo] });
   },
-
+  updateTodo: async (id, data) => {
+    const updated = await todosApi.update(id, data);
+    set({
+      todos: get().todos.map((t) => (t.id === id ? updated : t)),
+    });
+  },
   toggleTodo: async (id) => {
     const updated = await todosApi.toggle(id);
     set({

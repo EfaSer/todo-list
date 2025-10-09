@@ -20,6 +20,7 @@ import { useTodosStore } from "@/store/todosStore";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextArea } from "@/components/ui/TextArea";
+import { ITodo } from "@/types/todo";
 
 export const TodoPage = () => {
   const {
@@ -29,6 +30,7 @@ export const TodoPage = () => {
     toggleTodo,
     removeTodo,
     reorderTodos,
+    updateTodo,
     search,
     filter,
     loading,
@@ -98,6 +100,13 @@ export const TodoPage = () => {
   const handleLogout = async () => {
     logout();
     navigate("/login");
+  };
+
+  const handleSave = async (updatedTodo: ITodo) => {
+    await updateTodo(updatedTodo.id, {
+      title: updatedTodo.title,
+      description: updatedTodo.description,
+    });
   };
 
   if (loading) return <Loader />;
@@ -175,6 +184,7 @@ export const TodoPage = () => {
                 todo={todo}
                 onToggle={() => toggleTodo(todo.id)}
                 onDelete={() => removeTodo(todo.id)}
+                onSave={handleSave}
               />
             ))}
           </div>
