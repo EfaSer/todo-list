@@ -17,20 +17,22 @@ function App() {
 
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Navigate to="/todos" />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route
-          path="/todos"
-          element={
-            <ProtectedRoute>
-              <TodoPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="*" element={<Navigate to="/todos" replace />} />
-      </Routes>
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<Navigate to="/todos" />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/todos"
+            element={
+              <ProtectedRoute>
+                <TodoPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/todos" replace />} />
+        </Routes>
+      </div>
 
       {sessionExpired && (
         <Modal

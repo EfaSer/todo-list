@@ -103,8 +103,8 @@ export const TodoPage = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="p-8">
-      <div className="lg:flex lg:items-center lg:justify-between mb-10">
+    <div className="flex flex-col h-screen items-center p-8">
+      <div className="w-full lg:flex lg:items-center lg:justify-between mb-10">
         <h1 className="text-2xl/7 font-bold text-white sm:truncate sm:text-3xl sm:tracking-tight">
           Мои задачи
         </h1>
@@ -120,35 +120,44 @@ export const TodoPage = () => {
           </span>
         </div>
       </div>
+      <div className="flex justify-start w-full">
+        <form
+          onSubmit={handleAdd}
+          className="flex justify-self-start gap-5 w-full max-w-md md-6 flex-col mb-5"
+        >
+          <h2 className="text-xl/7 font-bold text-white sm:truncate sm:text-3xl sm:tracking-tight">
+            Создать задачу
+          </h2>
+          <div>
+            <Input
+              placeholder="Введите название задачи..."
+              value={title}
+              onChange={handleTitleChange}
+              error={!!error}
+              className="relative"
+            />
+            {error && (
+              <p className="absolute t-0 l-0 text-red-500 text-xs">{error}</p>
+            )}
+          </div>
 
-      <form
-        onSubmit={handleAdd}
-        className="flex gap-5 w-full max-w-md md-6 flex-col mb-10"
-      >
-        <h2 className="text-xl/7 font-bold text-white sm:truncate sm:text-3xl sm:tracking-tight">
-          Создать задачу
-        </h2>
-        <div>
-          <Input
-            label="Введите название задачи..."
-            value={title}
-            onChange={handleTitleChange}
-            error={!!error}
-            className="relative"
+          <TextArea
+            placeholder="Введите описание задачи..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
-          {error && (
-            <p className="absolute t-0 l-0 text-red-500 text-xs">{error}</p>
-          )}
-        </div>
-
-        <TextArea
-          label="Введите описание задачи..."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <Button type="submit">Добавить</Button>
-      </form>
-      <TodoFilterBar />
+          <Button
+            className="flex items-center gap-2 justify-center"
+            type="submit"
+          >
+            <span className="text-2xl">+</span>
+            <span className="text-lg">Добавить</span>
+          </Button>
+        </form>
+      </div>
+      <div className="flex justify-start w-full pt-5 border-t border-gray-700">
+        <TodoFilterBar />
+      </div>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -158,7 +167,7 @@ export const TodoPage = () => {
           items={filterTodos.map((t) => t.id)}
           strategy={verticalListSortingStrategy}
         >
-          <div className="space-y-3 w-full max-w-1/2">
+          <div className="space-y-3 w-full">
             {filterTodos.map((todo) => (
               <TodoItem
                 key={todo.id}

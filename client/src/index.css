@@ -96,3 +96,9 @@ h1 {
 .animate-opacity-out {
   animation: fadeOutOpacityBG 0.2s ease-in forwards;
 }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100vh;
+}

@@ -5,7 +5,7 @@ export const TodoFilterBar = () => {
   const { search, filter, setSearch, setFilter } = useTodosStore();
 
   return (
-    <div className="flex flex-col sm:flex-row gap-5 mb-5 items-center">
+    <div className="flex flex-col sm:flex-row gap-5 mb-5 w-full items-center justify-between">
       <Input
         type="text"
         placeholder="Поиск задач..."
