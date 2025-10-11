@@ -11,7 +11,7 @@ interface TodoItemProps {
   todo: ITodo;
   onToggle: () => void;
   onDelete: () => void;
-  onSave: () => void;
+  onSave: (updatedTodo: ITodo) => Promise<void>;
 }
 
 export const TodoItem = ({
@@ -116,7 +116,7 @@ export const TodoItem = ({
           //   setIsOpenEdit(false);
           //   setTimeout(() => onSave?.(), 200);
           // }}
-          onSave={(updatedTodo) => {
+          onSave={(updatedTodo: ITodo) => {
             onSave(updatedTodo); // передаем в родителя
             setIsOpenEdit(false);
           }}

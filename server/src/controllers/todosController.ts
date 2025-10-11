@@ -24,6 +24,21 @@ export const createTodo = async (req: AuthRequest, res: Response) => {
 
 export const updateTodo = async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
+  const { title, description } = req.body;
+
+  try {
+    const todo = await prisma.todo.update({
+      where: { id: Number(id) },
+      data: { title, description },
+    });
+    res.json(todo);
+  } catch (e) {
+    res.status(500).json({ error: "Ошибка при обновлении задачи" });
+  }
+};
+
+export const toggleTodo = async (req: AuthRequest, res: Response) => {
+  const { id } = req.params;
 
   const existing = await prisma.todo.findUnique({
     where: { id: Number(id) },
