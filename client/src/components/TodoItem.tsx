@@ -5,7 +5,9 @@ import { useState } from "react";
 import { Modal } from "./Modal";
 import DeleteIcon from "../assets/delete.svg?react";
 import EditIcon from "../assets/edit.svg?react";
+import MoreIcon from "../assets/more.svg?react";
 import { EditTodoModal } from "./EditTodoModal";
+import { useNavigate } from "react-router-dom";
 
 interface TodoItemProps {
   todo: ITodo;
@@ -25,6 +27,7 @@ export const TodoItem = ({
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
+  const navigate = useNavigate();
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -72,7 +75,16 @@ export const TodoItem = ({
             </div>
           )}
         </div>
-        <div className="flex gap-4 absolute bottom-2 right-2">
+        <div className="flex gap-4 absolute bottom-4 right-3">
+          <button
+            onClick={() => navigate(`/todos/${id}`)}
+            className="inline-flex items-center justify-center text-white/60 hover:text-white/90 transition-colors w-5 h-5 cursor-pointer"
+          >
+            <span className="text-lg font-light">
+              <MoreIcon className="w-5 h-5 text-white hover:text-gray-400 transition-colors" />
+            </span>
+          </button>
+
           <button
             onClick={() => setIsOpenEdit(true)}
             className="inline-flex items-center justify-center text-white/60 hover:text-white/90 transition-colors w-5 h-5 cursor-pointer"
@@ -112,12 +124,8 @@ export const TodoItem = ({
         <EditTodoModal
           todo={todo}
           isOpen={isOpenEdit}
-          // onConfirm={() => {
-          //   setIsOpenEdit(false);
-          //   setTimeout(() => onSave?.(), 200);
-          // }}
           onSave={(updatedTodo: ITodo) => {
-            onSave(updatedTodo); // передаем в родителя
+            onSave(updatedTodo);
             setIsOpenEdit(false);
           }}
           onCancel={() => {

@@ -176,7 +176,7 @@ export const TodoPage = () => {
           items={filterTodos.map((t) => t.id)}
           strategy={verticalListSortingStrategy}
         >
-          <div className="space-y-3 w-full">
+          <div className="space-y-3 w-full ">
             {filterTodos.map((todo) => (
               <TodoItem
                 key={todo.id}

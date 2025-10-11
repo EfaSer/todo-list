@@ -35,7 +35,7 @@ export const useTodosStore = create<TodoState>((set, get) => ({
 
   addTodo: async (title, description) => {
     const newTodo = await todosApi.create({ title, description });
-    set({ todos: [...get().todos, newTodo] });
+    set({ todos: [newTodo, ...get().todos] });
   },
   updateTodo: async (id, data) => {
     const updated = await todosApi.update(id, data);

@@ -3,6 +3,7 @@ import { Modal } from "./components/Modal";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
+import { TodoDetailsPage } from "./pages/TodoDetailsPage";
 import { TodoPage } from "./pages/TodoPage";
 import { useAuthStore } from "./store/authStore";
 
@@ -31,6 +32,7 @@ function App() {
             }
           />
           <Route path="*" element={<Navigate to="/todos" replace />} />
+          <Route path="/todos/:id" element={<TodoDetailsPage />} />
         </Routes>
       </div>
 
