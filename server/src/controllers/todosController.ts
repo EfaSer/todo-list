@@ -11,12 +11,15 @@ export const getTodos = async (req: AuthRequest, res: Response) => {
 };
 
 export const createTodo = async (req: AuthRequest, res: Response) => {
-  const { title, description } = req.body;
+  const { title, description, deadline, priority, category } = req.body;
   const todo = await prisma.todo.create({
     data: {
       title,
       description,
       ownerId: req.userId!,
+      deadline: deadline ? new Date(deadline) : null,
+      priority,
+      category,
     },
   });
   res.json(todo);

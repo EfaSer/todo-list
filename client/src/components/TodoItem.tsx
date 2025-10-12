@@ -6,6 +6,9 @@ import { Modal } from "./Modal";
 import DeleteIcon from "../assets/delete.svg?react";
 import EditIcon from "../assets/edit.svg?react";
 import MoreIcon from "../assets/more.svg?react";
+import CalendarIcon from "../assets/calendar.svg?react";
+import StarIcon from "../assets/star.svg?react";
+import CategoryIcon from "../assets/category.svg?react";
 import { EditTodoModal } from "./EditTodoModal";
 import { useNavigate } from "react-router-dom";
 
@@ -39,7 +42,7 @@ export const TodoItem = ({
       <div
         ref={setNodeRef}
         style={style}
-        className="flex gap-8 items-center justify-between p-3 rounded-md shadow-sm bg-white/10 h-20 relative cursor-grab active:cursor-grabbing"
+        className="flex gap-8 items-center justify-between p-3 rounded-md shadow-sm bg-white/10 h-26 relative cursor-grab active:cursor-grabbing"
       >
         <div
           onClick={onToggle}
@@ -52,28 +55,64 @@ export const TodoItem = ({
           {todo.completed && "✓"}
         </div>
         <div
-          className="min-w-0 flex-1 h-full items-start"
+          className="flex flex-col justify-between min-w-0 flex-1 h-full items-start"
           {...attributes}
           {...listeners}
         >
-          <div
-            className={`text-xl mr-9.5 font-bold text-white break-words  ${
-              todo.completed ? "line-through text-gray-400" : ""
-            }`}
-          >
-            {todo.title}
-          </div>
-          {todo.description && (
+          <div className="">
             <div
-              className={`text-base mr-9.5 font-normal text-white break-words  ${
+              className={`text-xl mr-9.5 font-bold text-white break-words  ${
                 todo.completed ? "line-through text-gray-400" : ""
               }`}
             >
-              {todo.description.length > 50
-                ? `${todo.description.slice(0, 50)}...`
-                : todo.description}
+              {todo.title}
             </div>
-          )}
+            {todo.description && (
+              <div
+                className={`text-base mr-9.5 font-normal text-white break-words  ${
+                  todo.completed ? "line-through text-gray-400" : ""
+                }`}
+              >
+                {todo.description.length > 50
+                  ? `${todo.description.slice(0, 50)}...`
+                  : todo.description}
+              </div>
+            )}
+          </div>
+          <div className="">
+            {(todo.deadline || todo.priority || todo.category) && (
+              <div className="flex items-center gap-3 text-sm text-gray-300 mt-1">
+                {todo.deadline && (
+                  <div className="flex items-center gap-1">
+                    <CalendarIcon className="w-4 h-4" />
+                    <span>{new Date(todo.deadline).toLocaleDateString()}</span>
+                  </div>
+                )}
+
+                {todo.priority && (
+                  <div className="flex items-center gap-1">
+                    <StarIcon
+                      className={`w-4 h-4 ${
+                        todo.priority === "high"
+                          ? "text-red-400"
+                          : todo.priority === "medium"
+                          ? "text-yellow-400"
+                          : "text-green-400"
+                      }`}
+                    />
+                    <span>{todo.priority}</span>
+                  </div>
+                )}
+
+                {todo.category && (
+                  <div className="flex items-center gap-1">
+                    <CategoryIcon className="w-4 h-4 text-purple-400" />
+                    <span>{todo.category}</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
         <div className="flex gap-4 absolute bottom-4 right-3">
           <button

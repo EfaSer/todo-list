@@ -10,7 +10,13 @@ interface TodoState {
   search: string;
   filter: FilterType;
   fetchTodos: () => Promise<void>;
-  addTodo: (title: string, description: string) => Promise<void>;
+  addTodo: (
+    title: string,
+    description: string,
+    deadline: string,
+    priority: string,
+    category: string
+  ) => Promise<void>;
   toggleTodo: (id: number) => Promise<void>;
   removeTodo: (id: number) => Promise<void>;
   updateTodo: (
@@ -33,8 +39,14 @@ export const useTodosStore = create<TodoState>((set, get) => ({
     set({ todos: data, loading: false });
   },
 
-  addTodo: async (title, description) => {
-    const newTodo = await todosApi.create({ title, description });
+  addTodo: async (title, description, deadline, priority, category) => {
+    const newTodo = await todosApi.create({
+      title,
+      description,
+      deadline,
+      priority,
+      category,
+    });
     set({ todos: [newTodo, ...get().todos] });
   },
   updateTodo: async (id, data) => {

@@ -21,6 +21,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextArea } from "@/components/ui/TextArea";
 import { ITodo } from "@/types/todo";
+import { Select } from "@/components/ui/Select";
 
 export const TodoPage = () => {
   const {
@@ -39,7 +40,17 @@ export const TodoPage = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [deadline, setDeadline] = useState("");
+  const [priority, setPriority] = useState("");
+  const [category, setCategory] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+  const optionsSelect = [
+    { value: "", name: "Приоритет" },
+    { value: "low", name: "Низкий" },
+    { value: "medium", name: "Средний" },
+    { value: "high", name: "Высокий" },
+  ];
 
   useEffect(() => {
     fetchTodos();
@@ -87,9 +98,12 @@ export const TodoPage = () => {
       return;
     }
     setError("");
-    await addTodo(title, description);
+    await addTodo(title, description, deadline, priority, category);
     setTitle("");
     setDescription("");
+    setDeadline("");
+    setPriority("");
+    setCategory("");
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,6 +169,26 @@ export const TodoPage = () => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+
+          <Input
+            placeholder="Дата выполнения"
+            type="date"
+            value={deadline}
+            onChange={(e) => setDeadline(e.target.value)}
+          />
+
+          <Select
+            value={priority}
+            options={optionsSelect}
+            onChange={(e) => setPriority(e.target.value)}
+          />
+
+          <Input
+            placeholder="Категория (например, Работа, Личное)"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
+
           <Button
             className="flex items-center gap-2 justify-center"
             type="submit"

@@ -6,4 +6,7 @@ export interface ITodo {
   order: number;
   createdAt: Date;
   updatedAt: Date;
+  deadline?: string;
+  priority?: string;
+  category?: string;
 }

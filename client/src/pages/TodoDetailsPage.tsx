@@ -7,6 +7,9 @@ import { useAuthStore } from "@/store/authStore";
 import { useTodosStore } from "@/store/todosStore";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import CalendarIcon from "../assets/calendar.svg?react";
+import StarIcon from "../assets/star.svg?react";
+import CategoryIcon from "../assets/category.svg?react";
 
 export const TodoDetailsPage = () => {
   const navigate = useNavigate();
@@ -143,9 +146,47 @@ export const TodoDetailsPage = () => {
             </div>
 
             {todo.description ? (
-              <div className="">
-                <h3>Описание:</h3>
-                <p className="text-gray-300 mb-4">{todo.description}</p>
+              <div className="flex flex-col justify-between gap-5">
+                <div className="">
+                  <h3>Описание:</h3>
+                  <p className="text-gray-300 mb-4">{todo.description}</p>
+                </div>
+                <div className="">
+                  {(todo.deadline || todo.priority || todo.category) && (
+                    <div className="flex items-center gap-3 text-sm text-gray-300 mt-1">
+                      {todo.deadline && (
+                        <div className="flex items-center gap-1">
+                          <CalendarIcon className="w-4 h-4" />
+                          <span>
+                            {new Date(todo.deadline).toLocaleDateString()}
+                          </span>
+                        </div>
+                      )}
+
+                      {todo.priority && (
+                        <div className="flex items-center gap-1">
+                          <StarIcon
+                            className={`w-4 h-4 ${
+                              todo.priority === "high"
+                                ? "text-red-400"
+                                : todo.priority === "medium"
+                                ? "text-yellow-400"
+                                : "text-green-400"
+                            }`}
+                          />
+                          <span>{todo.priority}</span>
+                        </div>
+                      )}
+
+                      {todo.category && (
+                        <div className="flex items-center gap-1">
+                          <CategoryIcon className="w-4 h-4 text-purple-400" />
+                          <span>{todo.category}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             ) : (
               <p className="text-gray-500 italic mb-4">Нет описания</p>
