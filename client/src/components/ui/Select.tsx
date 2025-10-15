@@ -1,58 +1,97 @@
-import { SelectHTMLAttributes } from "react";
+import { useEffect, useRef, useState } from "react";
+import ArrowDown from "../../assets/arrow-down.svg?react";
+import clsx from "clsx";
 
-interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+interface Option {
+  value: string;
+  label: string;
+}
+
+interface SelectProps {
   label?: string;
   value: string;
-  error?: string;
   className?: string;
-  options: { name: string; value: string }[];
+  onChange: (value: string) => void;
+  options: Option[];
+  placeholder?: string;
 }
 
 export const Select = ({
   label,
   value,
-  error,
   className,
+  onChange,
   options,
-  ...props
+  placeholder = "Выберите значение",
 }: SelectProps) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const selectedLabel = options.find((o) => o.value === value)?.label;
+
   return (
-    <div className={"flex flex-col gap-1"}>
-      {label && (
-        <label className="block text-sm/6 font-medium text-gray-100">
-          {label}
-        </label>
-      )}
-      <div className="relative ">
-        <select
-          value={value}
-          {...props}
-          className="w-full appearance-none bg-white/5 outline-1 -outline-offset-1 outline-white/10 rounded-lg py-2 px-3 pr-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-gray-700 transition-all"
+    <div className="flex flex-col gap-1 text-white relative" ref={ref}>
+      {label && <label className="text-gray-100 text-sm">{label}</label>}
+
+      <div
+        onClick={() => setOpen((prev) => !prev)}
+        className={clsx(
+          "flex items-center justify-between bg-white/5 border border-gray-700 rounded-lg px-3 py-2 text-base text-gray-100 cursor-pointer transition-all",
+          {
+            "ring-2 ring-indigo-500": open,
+            "hover:border-white/40": !open,
+          }
+        )}
+      >
+        <span
+          className={clsx("text-sm/6", {
+            "text-gray-500": !selectedLabel || selectedLabel === "Приоритет",
+            "": selectedLabel,
+          })}
         >
-          {options.map((option) => (
-            <option
-              className="bg-white/5"
-              key={option.value}
-              value={option.value}
-            >
-              {option.name}
-            </option>
-          ))}
-        </select>
-        <svg
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white/70 w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+          {selectedLabel || placeholder}
+        </span>
+        <ArrowDown
+          className={clsx("w-4 h-4 text-gray-500 transition-transform", {
+            "rotate-180": open,
+            "": !open,
+          })}
+        />
       </div>
+
+      {open && (
+        <div className="absolute top-full mt-1 w-full bg-[#30302c] border-white/10 rounded-lg shadow-lg z-10 overflow-hidden animate-fade-in">
+          {options.map((option) => (
+            <div
+              key={option.value}
+              onClick={() => {
+                onChange(option.value);
+                setOpen(false);
+              }}
+              className={clsx(
+                "px-3 py-2  cursor-pointer text-sm transition-colors",
+                {
+                  "bg-indigo-500 text-white": option.value === value,
+                  "hover:bg-white/10": option.value !== value,
+                }
+              )}
+            >
+              {option.label}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

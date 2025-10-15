@@ -46,10 +46,10 @@ export const TodoPage = () => {
   const [error, setError] = useState<string | null>(null);
 
   const optionsSelect = [
-    { value: "", name: "Приоритет" },
-    { value: "low", name: "Низкий" },
-    { value: "medium", name: "Средний" },
-    { value: "high", name: "Высокий" },
+    { value: "", label: "Приоритет" },
+    { value: "low", label: "Низкий" },
+    { value: "medium", label: "Средний" },
+    { value: "high", label: "Высокий" },
   ];
 
   useEffect(() => {
@@ -180,7 +180,8 @@ export const TodoPage = () => {
           <Select
             value={priority}
             options={optionsSelect}
-            onChange={(e) => setPriority(e.target.value)}
+            onChange={setPriority}
+            className={""}
           />
 
           <Input
